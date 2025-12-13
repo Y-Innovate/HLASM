@@ -15,25 +15,24 @@ SAMP02   CSECT
          STM   R14,R12,12(R13)   Save caller's registers in our SA
          LR    R11,R15           Set up R11 for SAMP02
          USING SAMP02,R11          addressability
-         LR    R8,R1             Save parameter ptr in R8
          GETMAIN RU,LV=DSASIZ    Allocate memory for our DSA
          ST    R13,4(,R1)        Back chain the caller's SA
          LR    R2,R13            Save pointer to caller's SA
          LR    R13,R1            Address our own SA
          USING DSA,R13           DSA addressability
          ST    R13,8(,R2)        Forward chain our SA in caller's SA
-         LR    R1,R8             Restore parameter ptr in R1
 *
-         LA    R2,16             Point R2 to CVT address
-         L     R2,0(,R2)         Point R2 to CVT
-         MVC   LPAR,340(R2)      Copy CVTSNAME to our LPAR variable
+         MVC   MYWTO+2(11),=C'HELLO FROM '  First bit of text 
+         LA    R2,16             Point R2 to CVT address 
+         L     R2,0(,R2)         Point R2 to CVT 
+         MVC   MYWTO+13(4),340(R2)  Copy CVTSNAME to our LPAR variable
+         MVC   MYWTO(2),=H'15'   Set length of varying string to 15 
 *
          WTO   TEXT=MYWTO,ROUTCDE=11,DESC=7
 *
-         L     R2,4(,R13)        Retrieve pointer to caller's SA
+         L     R13,4(,R13)       Restore pointer to caller's SA
          DROP  DSA               Forget DSA addressability
-         FREEMAIN RU,LV=DSASIZ,A=8(,R2)  Free allocated memory
-         LR    R13,R2            Restore ptr to caller's SA
+         FREEMAIN RU,LV=DSASIZ,A=8(,R13)  Free allocated memory
          LM    R14,R12,12(R13)   Restore caller's registers
          XR    R15,R15           Set return value to 0
          BR    R14               Return to caller
