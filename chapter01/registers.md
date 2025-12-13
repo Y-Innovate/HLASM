@@ -31,7 +31,7 @@ R13 : 0x1199000000000000
 R14 : 0x0000000089C5DC40  
 R15 : 0x0000000000000000</span>
 
-There are many different such machine instructions, the most common ones are for example for fetching some data from memory into a register (load, L), storing the contents of a register in memory (store, ST), getting the address of some data in memory and putting that address in a register (load address, LA), copying some data from one address in memory to another address (move, MVC), etc.
+There are many different such machine instructions, the most common ones are for example for fetching some data from memory into a register (load, `L`), storing the contents of a register in memory (store, `ST`), getting the address of some data in memory and putting that address in a register (load address, `LA`), copying some data from one address in memory to another address (move, `MVC`), etc.
 
 In for example X86 architecture the machine instructions are very different from the ones for s390x, for some of the instructions on X86 there are specific registers you HAVE to use. For s390x that's not the case, on Z you have a set of 16 general purpose registers (and a bunch more, but that's not for this training) that can be used for a large majority of the instructions. There are programming conventions though, so it's not entirely free-for-all.
 

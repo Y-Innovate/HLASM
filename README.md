@@ -8,3 +8,13 @@
 ## Chapter 2 ##
 1. [Save areas](/chapter02/saveareas.md)
 1. [Programming and register conventions](/chapter02/registerconventions.md)
+1. [USING](/chapter02/using.md)
+1. [Condition codes revisited](/chapter02/conditioncodesrevisited.md)
+
+## Chapter 3 ##
+1. [Assemble your first program](/chapter03/firstassembly.md)
+
+## Chapter 4 ##
+1. [Defining data](/chapter04/definingdata.md)
+1. [Working with data](/chapter04/workingwithdata.md)
+1. [Allocating memory](/chapter04/allocatingmemory.md)
