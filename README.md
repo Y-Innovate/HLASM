@@ -25,3 +25,5 @@
 
 ## Chapter 6 ##
 1. [AMODE and RMODE](/chapter06/residency.md)
+1. [Writing to a data set](/chapter06/writetodataset.md)
+1. [Reading from a data set](/chapter06/readfromdataset.md)
