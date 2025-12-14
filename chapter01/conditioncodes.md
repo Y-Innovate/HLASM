@@ -9,14 +9,14 @@ As your code executes the CPU will load every next instruction from memory befor
 ## Condition codes ##
 
 Some of the machine instructions, apart from operating on registers and potentially memory, give off a condition code that can be read to determine what happened and what to do next. The condition code takes up only 2 bits in the PSW, so there are max 4 values possible.  
-For example a compare of 2 registers (`CR`) can give back 3 different values in the condition code:  
+For example a compare of 2 registers with `CR` (compare registers) can give back 3 different values in the condition code:  
 <table>
 <tr><td>0</td><td>Operands are equal</td></tr>
 <tr><td>1</td><td>First operand low</td></tr>
 <tr><td>2</td><td>First operand high</td></tr>
 </table>  
   
-Another example is to add 2 registers together (`AR`), which can give back 4 different values in the condition code:
+Another example is to add 2 registers together with `AR` (add registers), which can give back 4 different values in the condition code:
 <table>
 <tr><td>0</td><td>Result zero; no overflow</td></tr>
 <tr><td>1</td><td>Result less than zero; no overflow</td></tr>

@@ -41,6 +41,6 @@ Assembled that looks like this in the listing:
 00000018 00000010                             11          DC    A(16)        The 4 bytes address of 16
 ```
 
-Notice the little extra blank space before the address constant which is the result of defining `A` type constants on a fullword boundary (a memory address divisible by 4).
+Notice the little extra blank space before the address constant which is the result of defining `A` type constants that have to be on a fullword boundary (a memory address divisible by 4).
 
 [Prev](/chapter03/firstassembly.md) | [Next](/chapter04/workingwithdata.md)

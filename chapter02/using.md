@@ -9,12 +9,12 @@ Consider this bit of code:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LR&nbsp;&nbsp;&nbsp;&nbsp;R5,R6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Put value of R6 in R5  
 SKIPTO&nbsp;&nbsp;&nbsp;ST&nbsp;&nbsp;&nbsp;&nbsp;R5,0(,R1)&nbsp;&nbsp;Store value of R5 where R1 points to</span>  
 
-`SKIPTO` in this example is a named address in our code meant to be a point to branch to. The actual branch instruction used is branch on condition or `BC` which I'll explain in a moment. I want to focus on how we're replacing the address of the next instruction in the PSW with the address of the statement labeled `SKIPTO` by branching to it.
+`SKIPTO` in this example is a named address in our code meant to be a point to branch to. The actual branch instruction used is `BC` (branch on condition) that conditionally branches based on the value of the condition code which I'll explain in a moment. I want to focus first on how we're replacing the address of the next instruction in the PSW with the address of the statement labeled `SKIPTO` by branching to it.
 
-If you look up the branch on condition `BC` instruction in the Principles of Operation you'll find:  
+If you look up the `BC` (branch on condition) instruction in the Principles of Operation you'll find:  
 ><span style="font-family: monospace">BC&nbsp;&nbsp;&nbsp;&nbsp;M</span><span style="font-family: monospace; font-size: x-small">1</span><span style="font-family: monospace">,D</span><span style="font-family: monospace; font-size: x-small">2</span><span style="font-family: monospace">(X</span><span style="font-family: monospace; font-size: x-small">2</span><span style="font-family: monospace">,B</span><span style="font-family: monospace; font-size: x-small">2</span><span style="font-family: monospace">)</span>
 
-You might recognize that second parameter being in the format we've seen in the `L` or `LA` instructions, for example `28(,R11)`.
+You might recognize that second parameter being in the format we've seen in the `L` (load) or `LA` (load address) instructions, for example `28(,R11)`.
 
 So the Assembler expects the branch on condition instruction in this format:  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BC&nbsp;&nbsp;&nbsp;&nbsp;12,28(,R11)  

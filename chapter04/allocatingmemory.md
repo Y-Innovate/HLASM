@@ -30,7 +30,9 @@ SAVEAREA DS&nbsp;&nbsp;&nbsp;&nbsp;18F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 MYWTO&nbsp;&nbsp;&nbsp;&nbsp;DS&nbsp;&nbsp;&nbsp;&nbsp;H,CL20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WTO up to 20 characters  
 *  
 DSASIZ&nbsp;&nbsp;&nbsp;EQU&nbsp;&nbsp;&nbsp;*-DSA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calculated size of DSA</span>  
-First off the data fields are now encapsulated by a so called `DSECT`, which turns the sequence of definitions into a blueprint for how a memory area is structured without actualling defining it and so without it taking up space in your load module. The equate at the end of that block has the Assembler automatically calculate the size of the DSECT in bytes by subtracting the address of the start of the DSECT (pointed to using the name `DSA`) from the current address `*`.  
+First off the data fields are now encapsulated by a so called `DSECT`, which turns the sequence of definitions into a blueprint for how a memory area is structured without actualling defining it and so without it taking up space in your load module. The equate at the end of that block has the Assembler automatically calculate the size of the DSECT in bytes by subtracting the address of the start of the DSECT (pointed to using the name `DSA`) from the current address in your code (or in this case your DSECT) indicated by the asterisk `*`.  
+So in this example `*-DSA` resolves in the length of 18 fullwords and a halfword prefixed string of 20, so 18 x 4 + 2 + 20 = 94.
+
 Technically you could allocate different chunks of memory for the save area and for your working data fields, but it's pretty common to just have the save area be at the top of one larger chunk of memory and address both the save area *and* your working data fields with one `USING` with R13.
 
 Next lets look at what changed in the so called prolog, meaning the code at the top to set up addressability.

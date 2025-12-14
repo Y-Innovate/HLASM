@@ -89,6 +89,6 @@ These lines are unchanged.
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;MVC&nbsp;&nbsp;&nbsp;MYWTO(2),=H'15'&nbsp;&nbsp;&nbsp;Set length of varying string to 15</span>  
 `MYWTO(2)` means write to the first 2 bytes of MYWTO.  
 `MYWTO(2),=H'15'` means fill that first 2 bytes with the halfword value 15.  
-Hang on, the source data is a halfword, but we're using the `MVC` instruction, shouldn't we use a 'move halfword' instruction? No, because there isn't one. The `MVC` instruction actually doesn't care if it's moving character data or not. It's just copying memory from one place to another.
+Hang on, the source data is a halfword, but we're using the `MVC` (move) instruction, shouldn't we use a 'move halfword' instruction? No, because there isn't one. The `MVC` (move) instruction actually doesn't care if it's moving character data or not. It's just copying memory from one place to another.
 
 [Prev](/chapter04/definingdata.md) | [Next](/chapter04/allocatingmemory.md)

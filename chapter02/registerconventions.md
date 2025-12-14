@@ -36,51 +36,55 @@ This tells the Assembler that the lines that follow it are lines of code (as opp
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STM&nbsp;&nbsp;&nbsp;R14,R12,12(R13)</span>  
-This instruction is store multiple or STM, which can store any number of your 16 general purpose registers and works by starting with the first parameter's register number, in this case R14, counting up and looping around to R0 to continue on to R12, effectively saving 15 registers at the address R13, offset by 12, points to. This trusts any caller follows the convention of having R13 point to it's save area.
+This instruction is `STM` (store multiple), which can store any number of your 16 general purpose registers and works by starting with the first parameter's register number, in this case R14, counting up and looping around to R0 to continue on to R12, effectively saving 15 registers at the address R13, offset by 12, points to. This trusts any caller follows the convention of having R13 point to it's save area.
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LR&nbsp;&nbsp;&nbsp;&nbsp;R11,R15</span>  
-Another convention is that R15, on entry to your code, points to the first instruction of your code. Because R15 is used in that way, there's a good chance it's needed for similar reasons in your code. So this statement copies the address in R15 to R11 to free up R15 for other use.
+Another convention is that R15, on entry to your code, points to the first instruction of your code. Because R15 is used in that way, there's a good chance it's needed for similar reasons in your code. So this statement uses `LR` (load registers) to copy the address in R15 to R11 to free up R15 for other use.
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;SAMP01,R11</span>  
-A USING is explained later in this training, so for now just assume it's needed to be able to access the variable SAVEAREA in the next statements. The actual variable is not shown in the sample code because it requires a bit more explaining further on in this training.  
+A `USING` is explained later in this training, so for now just assume it's needed to be able to access the variable SAVEAREA in the next statements. The actual variable is not shown in the sample code because it requires a bit more explaining further on in this training.  
 There's no convention that dictates R11 for this purpose, but you often see the higher registers for this kind of addressability.
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST&nbsp;&nbsp;&nbsp;&nbsp;R13,SAVEAREA+4</span>  
-In the previous page I explained how one of the tasks of each program is to set up a save area of it's own and chain it with the caller's save area. This statement does half of that, more specifically it sets the address of the caller's save area in the back pointer of it's own save area.
+In the previous page I explained how one of the tasks of each program is to set up a save area of it's own and chain it with the caller's save area. This statement does half of that, more specifically it sets the address of the caller's save area in the back pointer of it's own save area by using the `ST` (store) instruction.
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LR&nbsp;&nbsp;&nbsp;&nbsp;R2,R13</span>  
-Because R13 needs to be changed to point to the called program's save area instead of the caller's, we need to save the pointer to the caller's save area in another register, which could have been any, in this example it's R2.
+Because R13 needs to be changed to point to the called program's save area instead of the caller's, we need to save the pointer to the caller's save area in another register, which could have been any, in this example we're using another `LR` (load registers) to copy R13 to R2.
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LA&nbsp;&nbsp;&nbsp;&nbsp;R13,SAVEAREA</span>  
-Here we set up R13 to point to our own save area.
+Here we set up R13 to point to our own save area with the `LA` (load address) instruction.
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST&nbsp;&nbsp;&nbsp;&nbsp;R13,8(,R2)</span>  
-Three statements ago we back chained the caller's save area in our own. This statement forward chains our save area in the caller's one.
+Three statements ago we back chained the caller's save area in our own. This statement forward chains our save area in the caller's one with another `ST` (store) instruction.
 
-At this point your program is properly set up to do whatever code for its purpose. The next lines are for wrapping things up before passing control back to the caller.
+<br>  
+
+>At this point your program is properly set up to do whatever code for its purpose. The next lines are for wrapping things up before passing control back to the caller.  
+
+<br>  
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R13,4(,R13)</span>  
-This statement restores R13 to point to the caller's save area. Since we're wrapping things up we know there won't be any calls from our program to another, so our own save area pointer is no longer needed.
+This statement restores R13 to point to the caller's save area using the `L` (load) instruction. Since we're wrapping things up we know there won't be any calls from our program to another, so our own save area pointer is no longer needed.
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LM&nbsp;&nbsp;&nbsp;&nbsp;R14,R12,12(R13)</span>  
-This instruction is load multiple or LM, which is the reverse of the STM instruction explained above. It can load any number of your 16 general purpose registers and works by starting with the first parameter's register number, in this case R14, counting up and looping around to R0 to continue on to R12, effectively loading 15 registers from  the address R13, offset by 12, points to.
+This instruction is `LM` (load multiple), which is the reverse of the `STM` (store multiple) instruction explained above. It can load any number of your 16 general purpose registers and works by starting with the first parameter's register number, in this case R14, counting up and looping around to R0 to continue on to R12, effectively loading 15 registers from  the address R13, offset by 12, points to.
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XR&nbsp;&nbsp;&nbsp;&nbsp;R15,R15</span>  
-This instruction is used to bit-wise 'exclusive or' a register with another register. Exclusive or means the bits of both registers are combined into a new binary value where each bit position becomes '1' if only one of the bits in the same position of the input registers is '1' but not both. By exclusive or-ing a register with itself you're effectively clearing it to all '0'-s.
+This instruction, `XR` (exclusive or registers), is used to bit-wise 'exclusive or' a register with another register. Exclusive or means the bits of both registers are combined into a new binary value where each bit position becomes '1' if only one of the bits in the same position of the input registers is '1' but not both. By exclusive or-ing a register with itself you're effectively clearing it to all '0'-s.
 We're doing this to follow another register convention which is to have R15 indicate success or failure of our code to the caller, zero being success.
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BR&nbsp;&nbsp;&nbsp;&nbsp;R14</span>  
-Finally we're passing control back to the calling program by branching to the address pointed to by R14. Branching is the term for having the operating system continue the flow of instructions from another point in memory. Like a GO TO in COBOL.
+Finally we're passing control back to the calling program by branching to the address pointed to by R14. We're using the `BR` (branch register) instruction for this. Branching is the term for having the operating system continue the flow of instructions from another point in memory. Like a GO TO in COBOL.
 This follows another register convention where the caller is supposed to use an instruction that branches to the beginning of our code and at the same time pass the pointer to the statement *after* its own branch instruction in R14.
 By our branching to that address in R14 we're continuing the flow of instructions of the caller program right after the call to ours.
 

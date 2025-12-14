@@ -20,7 +20,7 @@ So to reiterate, the possible condition code values are:
   <tr><td>11</td><td>3</td></tr>
 </table>  
 
-And for the compare register or `CR` instruction those condition codes mean:
+And for the `CR` (compare registers) instruction those condition codes mean:
 <table>
   <tr><th>bits</th><th>decimal</th><th>meaning</th></tr>
   <tr><td>00</td><td>0</td><td>Operands are equal</td></tr>
@@ -29,20 +29,20 @@ And for the compare register or `CR` instruction those condition codes mean:
   <tr><td>11</td><td>3</td><td></td></tr>
 </table>  
 
-The way the 4 condition codes are mapped to the mask in the branch on condition `BC` instruction is:
+The way the 4 condition codes are mapped to the mask in the `BC` (branch on condition) instruction is:
 <table>
   <tr><td>Condition Code</td><td>0</td><td>1</td><td>2</td><td>3</td></tr>
   <tr><td>Mask position value</td><td>8</td><td>4</td><td>2</td><td>1</td></tr>
 </table>
 
-So thereby a mask of `b'1100'` on a branch on condition `BC` after a compare register `CR` instruction means "branch if the condition code is either 0=Operands are equal or 1=First operand low". Adding the mask position values in the mask gets us:  
+So thereby a mask of `b'1100'` on a `BC` (branch on condition) after a `CR` (compare register) instruction means "branch if the condition code is either 0=Operands are equal or 1=First operand low". Adding the mask position values in the mask gets us:  
 <table>
   <tr><td>Condition Code</td><td>0</td><td>1</td><td>2</td><td>3</td></tr>
   <tr><td>Mask</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
   <tr><td>Mask position value</td><td>8</td><td>4</td><td></td><td></td></tr>
 </table>
 
-Add those 2 mask position values together and you get the 12 we coded on our branch on condition `BC` instruction:  
+Add those 2 mask position values together and you get the 12 we coded on our `BC` (branch on condition) instruction:  
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+----4----+----5----+----6----+----7--</span>  
 <span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BC&nbsp;&nbsp;&nbsp;&nbsp;12,SKIPTO&nbsp;&nbsp;Branch to SKIPTO if R5 is less or equal to R6</span>  
 
