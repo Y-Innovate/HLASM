@@ -22,3 +22,6 @@
 ## Chapter 5 ##
 1. [IF-THEN-ELSE](/chapter05/selection.md)
 1. [Loops](/chapter05/iteration.md)
+
+## Chapter 6 ##
+1. [AMODE and RMODE](/chapter06/residency.md)

@@ -1,6 +1,6 @@
 # Assemble your first program #
 
-Have a look at [SAMP01.jcl](/chapter03/SAMP01.jcl), customize it where needed to your own environment and submit it to Assemble and link-edit your first program.
+Have a look at [SAMP01.jcl](/samples/SAMP01.jcl), customize it where needed to your own environment and submit it to Assemble and link-edit your first program.
 
 This sample job has everything instream and should normally result in CC=0000 and write 1 line into the z/OS log.
 

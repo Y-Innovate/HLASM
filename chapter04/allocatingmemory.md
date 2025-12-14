@@ -18,7 +18,7 @@ Having the working storage for data as part of your load module as was shown in 
 
 So it's best te keep data and code separate and the way to do that is to allocate some memory for your data at the start of your program with GETMAIN and free it at the end of your code with FREEMAIN.
 
-Have a look at [SAMP02.jcl](/chapter04/SAMP02.jcl), customize it where needed to your own environment and submit it to Assemble and link-edit this sample.
+Have a look at [SAMP02.jcl](/samples/SAMP02.jcl), customize it where needed to your own environment and submit it to Assemble and link-edit this sample.
 
 A couple of things to note.
 

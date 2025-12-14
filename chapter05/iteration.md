@@ -1,6 +1,6 @@
 # Loops #
 
-Have a look at [SAMP03.jcl](/chapter05/SAMP03.jcl), customize it where needed to your own environment and submit it to Assemble and link-edit a program with a loop.
+Have a look at [SAMP03.jcl](/samples/SAMP03.jcl), customize it where needed to your own environment and submit it to Assemble and link-edit a program with a loop.
 
 Let's examine a code snippet that loops 5 times and performs some logic each iteration:  
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+----4----+----5----+----6----+----7--</span>  
@@ -53,7 +53,7 @@ to
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+----4----+----5----+----6----+----7--</span>  
 <span style="font-family: monospace; white-space: pre">         MVC   MYWTO+16(2),ZONED+6  Copy 1 last digit</span>  
 <span style="font-family: monospace; white-space: pre">         WTO   TEXT=MYWTO,ROUTCDE=11,DESC=7</span>  
-Here the last 2 bytes of the ZONED variable area copied to the end of our MYWTO text.
+Here the last 2 bytes of the ZONED variable are copied to the end of our MYWTO text.
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+----4----+----5----+----6----+----7--</span>  
 <span style="font-family: monospace; white-space: pre">         BCT   R2,NEXT_WTO       Decrease R2 by 1 and jump if not 0</span>  
