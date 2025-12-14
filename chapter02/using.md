@@ -4,50 +4,50 @@ In the previous sample code you saw a statement with the keyword `USING` which i
 
 Consider this bit of code:  
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+----4----+----5----+----6----+----7--</span>  
-<span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CR&nbsp;&nbsp;&nbsp;&nbsp;R5,R6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Compare registers 5 and 6  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BC&nbsp;&nbsp;&nbsp;&nbsp;12,SKIPTO&nbsp;&nbsp;Branch to SKIPTO if R5 is less or equal to R6  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LR&nbsp;&nbsp;&nbsp;&nbsp;R5,R6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Put value of R6 in R5  
-SKIPTO&nbsp;&nbsp;&nbsp;ST&nbsp;&nbsp;&nbsp;&nbsp;R5,0(,R1)&nbsp;&nbsp;Store value of R5 where R1 points to</span>  
+<span style="font-family: monospace; white-space: pre">         CR    R5,R6      Compare registers 5 and 6</span>  
+<span style="font-family: monospace; white-space: pre">         BC    12,SKIPTO  Branch to SKIPTO if R5 is less or equal to R6</span>  
+<span style="font-family: monospace; white-space: pre">         LR    R5,R6      Put value of R6 in R5</span>  
+<span style="font-family: monospace; white-space: pre">SKIPTO   ST    R5,0(,R1)  Store value of R5 where R1 points to</span>  
 
 `SKIPTO` in this example is a named address in our code meant to be a point to branch to. The actual branch instruction used is `BC` (branch on condition) that conditionally branches based on the value of the condition code which I'll explain in a moment. I want to focus first on how we're replacing the address of the next instruction in the PSW with the address of the statement labeled `SKIPTO` by branching to it.
 
 If you look up the `BC` (branch on condition) instruction in the Principles of Operation you'll find:  
-><span style="font-family: monospace">BC&nbsp;&nbsp;&nbsp;&nbsp;M</span><span style="font-family: monospace; font-size: x-small">1</span><span style="font-family: monospace">,D</span><span style="font-family: monospace; font-size: x-small">2</span><span style="font-family: monospace">(X</span><span style="font-family: monospace; font-size: x-small">2</span><span style="font-family: monospace">,B</span><span style="font-family: monospace; font-size: x-small">2</span><span style="font-family: monospace">)</span>
+><span style="font-family: monospace">BC    M</span><span style="font-family: monospace; font-size: x-small">1</span><span style="font-family: monospace">,D</span><span style="font-family: monospace; font-size: x-small">2</span><span style="font-family: monospace">(X</span><span style="font-family: monospace; font-size: x-small">2</span><span style="font-family: monospace">,B</span><span style="font-family: monospace; font-size: x-small">2</span><span style="font-family: monospace">)</span>
 
 You might recognize that second parameter being in the format we've seen in the `L` (load) or `LA` (load address) instructions, for example `28(,R11)`.
 
 So the Assembler expects the branch on condition instruction in this format:  
-<span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BC&nbsp;&nbsp;&nbsp;&nbsp;12,28(,R11)  
+<span style="font-family: monospace; white-space: pre">         BC    12,28(,R11)</span>  
 Instead of this one:  
-<span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BC&nbsp;&nbsp;&nbsp;&nbsp;12,SKIPTO  
+<span style="font-family: monospace; white-space: pre">         BC    12,SKIPTO</span>  
 
 For the Assembler to know how to construct `28(,R11)` from the name `SKIPTO` it needs a `USING` that tells it a point in your code from which to calculate offsets from.
 
 Let's plug our snippet into the previous entry & exit code example:
 
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+----4----+----5----+----6----+----7--</span>  
-<span style="font-family: monospace">SAMP01&nbsp;&nbsp;&nbsp;CSECT  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;STM&nbsp;&nbsp;&nbsp;R14,R12,12(R13)&nbsp;&nbsp;&nbsp;Save caller's registers in our SA  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LR&nbsp;&nbsp;&nbsp;&nbsp;R11,R15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set up R11 for SAMP01  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;USING&nbsp;SAMP01,R11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;addressability  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST&nbsp;&nbsp;&nbsp;&nbsp;R13,SAVEAREA+4&nbsp;&nbsp;&nbsp;&nbsp;Back chain the caller's SA  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LR&nbsp;&nbsp;&nbsp;&nbsp;R2,R13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Save pointer to caller's SA  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LA&nbsp;&nbsp;&nbsp;&nbsp;R13,SAVEAREA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Address our own SA  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ST&nbsp;&nbsp;&nbsp;&nbsp;R13,8(,R2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Forward chain our SA in caller's SA  
-*  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CR&nbsp;&nbsp;&nbsp;&nbsp;R5,R6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Compare registers 5 and 6  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BC&nbsp;&nbsp;&nbsp;&nbsp;12,SKIPTO&nbsp;&nbsp;Branch to SKIPTO if R5 is less or equal to R6  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LR&nbsp;&nbsp;&nbsp;&nbsp;R5,R6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Put value of R6 in R5  
-SKIPTO&nbsp;&nbsp;&nbsp;ST&nbsp;&nbsp;&nbsp;&nbsp;R5,0(,R1)&nbsp;&nbsp;Store value of R5 where R1 points to  
-*  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R13,4(,R13)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Restore pointer to caller's SA  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LM&nbsp;&nbsp;&nbsp;&nbsp;R14,R12,12(R13)&nbsp;&nbsp;&nbsp;Restore caller's registers  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;XR&nbsp;&nbsp;&nbsp;&nbsp;R15,R15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set return value to 0  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BR&nbsp;&nbsp;&nbsp;&nbsp;R14&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Return to caller  
-*  
-SAVEAREA DS&nbsp;&nbsp;&nbsp;&nbsp;18F  
-*  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;END</span>  
+<span style="font-family: monospace; white-space: pre">SAMP01   CSECT</span>  
+<span style="font-family: monospace; white-space: pre">         STM   R14,R12,12(R13)   Save caller's registers in our SA</span>  
+<span style="font-family: monospace; white-space: pre">         LR    R11,R15           Set up R11 for SAMP01</span>  
+<span style="font-family: monospace; white-space: pre">         USING SAMP01,R11          addressability</span>  
+<span style="font-family: monospace; white-space: pre">         ST    R13,SAVEAREA+4    Back chain the caller's SA</span>  
+<span style="font-family: monospace; white-space: pre">         LR    R2,R13            Save pointer to caller's SA</span>  
+<span style="font-family: monospace; white-space: pre">         LA    R13,SAVEAREA      Address our own SA</span>  
+<span style="font-family: monospace; white-space: pre">         ST    R13,8(,R2)        Forward chain our SA in caller's SA</span>  
+<span style="font-family: monospace; white-space: pre">\*</span>  
+<span style="font-family: monospace; white-space: pre">         CR    R5,R6      Compare registers 5 and 6</span>  
+<span style="font-family: monospace; white-space: pre">         BC    12,SKIPTO  Branch to SKIPTO if R5 is less or equal to R6</span>  
+<span style="font-family: monospace; white-space: pre">         LR    R5,R6      Put value of R6 in R5</span>  
+<span style="font-family: monospace; white-space: pre">SKIPTO   ST    R5,0(,R1)  Store value of R5 where R1 points to</span>  
+<span style="font-family: monospace; white-space: pre">\*</span>  
+<span style="font-family: monospace; white-space: pre">         L     R13,4(,R13)       Restore pointer to caller's SA</span>  
+<span style="font-family: monospace; white-space: pre">         LM    R14,R12,12(R13)   Restore caller's registers</span>  
+<span style="font-family: monospace; white-space: pre">         XR    R15,R15           Set return value to 0</span>  
+<span style="font-family: monospace; white-space: pre">         BR    R14               Return to caller</span>  
+<span style="font-family: monospace; white-space: pre">\*</span>  
+<span style="font-family: monospace; white-space: pre">SAVEAREA DS    18F</span>  
+<span style="font-family: monospace; white-space: pre">\*</span>  
+<span style="font-family: monospace; white-space: pre">         END</span>  
 
 Now the 3rd and 4th line of code start to make a little more sense. The 3rd line copies R15 into R11, and by convention R15 points to the first instruction at the beginning of our code. The 4th line tells the assembler that any name that falls within the range of the start of our code up to 4095 bytes beyond the start of our code can be addresses with the help of R11.
 

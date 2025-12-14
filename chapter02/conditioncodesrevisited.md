@@ -2,10 +2,10 @@
 
 Let's look at that branch instruction again in the little code snippet:  
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+----4----+----5----+----6----+----7--</span>  
-<span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CR&nbsp;&nbsp;&nbsp;&nbsp;R5,R6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Compare registers 5 and 6  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BC&nbsp;&nbsp;&nbsp;&nbsp;12,SKIPTO&nbsp;&nbsp;Branch to SKIPTO if R5 is less or equal to R6  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LR&nbsp;&nbsp;&nbsp;&nbsp;R5,R6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Put value of R6 in R5  
-SKIPTO&nbsp;&nbsp;&nbsp;ST&nbsp;&nbsp;&nbsp;&nbsp;R5,0(,R1)&nbsp;&nbsp;Store value of R5 where R1 points to</span>
+<span style="font-family: monospace; white-space: pre">         CR    R5,R6      Compare registers 5 and 6</span>  
+<span style="font-family: monospace; white-space: pre">         BC    12,SKIPTO  Branch to SKIPTO if R5 is less or equal to R6</span>  
+<span style="font-family: monospace; white-space: pre">         LR    R5,R6      Put value of R6 in R5</span>  
+<span style="font-family: monospace; white-space: pre">SKIPTO   ST    R5,0(,R1)  Store value of R5 where R1 points to</span>
 
 We now understand how `SKIPTO` is resolved to an offset to R11, but I am yet to explain that `12`.
 
@@ -44,6 +44,6 @@ So thereby a mask of `b'1100'` on a `BC` (branch on condition) after a `CR` (com
 
 Add those 2 mask position values together and you get the 12 we coded on our `BC` (branch on condition) instruction:  
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+----4----+----5----+----6----+----7--</span>  
-<span style="font-family: monospace">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BC&nbsp;&nbsp;&nbsp;&nbsp;12,SKIPTO&nbsp;&nbsp;Branch to SKIPTO if R5 is less or equal to R6</span>  
+<span style="font-family: monospace; white-space: pre">         BC    12,SKIPTO  Branch to SKIPTO if R5 is less or equal to R6</span>  
 
 [Prev](/chapter02/using.md) | [Next](/chapter03/firstassembly.md)
