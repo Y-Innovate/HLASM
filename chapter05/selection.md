@@ -53,3 +53,5 @@ We get to this `WTO` only if MYSWITCH is unequal to 'Y' (so not only in the case
 <span style="font-family: monospace; color: gray">----+----1----+----2----+----3----+----4----+----5----+----6----+----7--</span>  
 <span style="font-family: monospace; white-space: pre">MYSWITCH_DONE EQU   \*             Named point in code end if/then/else</span>  
 Finally, another equate for us to jump to when we're done doing this if-then-else logic.
+
+[Prev](/chapter04/allocatingmemory.md) | [Next](/chapter05/iteration.md)

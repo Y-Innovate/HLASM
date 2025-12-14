@@ -18,3 +18,7 @@
 1. [Defining data](/chapter04/definingdata.md)
 1. [Working with data](/chapter04/workingwithdata.md)
 1. [Allocating memory](/chapter04/allocatingmemory.md)
+
+## Chapter 5 ##
+1. [IF-THEN-ELSE](/chapter05/selection.md)
+1. [Loops](/chapter05/iteration.md)
